@@ -88,13 +88,28 @@ public class FlutterKeyboardVisibilityPlugin implements FlutterPlugin, ActivityA
     ViewCompat.setOnApplyWindowInsetsListener(mainView, new OnApplyWindowInsetsListener() {
       @Override
       public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
-        isVisible = insets.isVisible(WindowInsetsCompat.Type.ime());
+        isVisible = isSystemKeyboardVisible(activity.getBaseContext());
         if (eventSink != null) {
           eventSink.success(isVisible ? 1 : 0);
         }
         return insets;
       }
     });
+  }
+
+  /**
+   * Check system keyboard visibility
+   * @return true if visible
+   */
+  public boolean isSystemKeyboardVisible(Context context) {
+    try {
+      final InputMethodManager manager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+      final Method windowHeightMethod = InputMethodManager.class.getMethod("getInputMethodWindowVisibleHeight");
+      final int height = (int) windowHeightMethod.invoke(manager);
+      return height > 0;
+    } catch (Exception e) {
+      return false;
+    }
   }
 
   private void unregisterListener() {
