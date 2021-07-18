@@ -1,12 +1,16 @@
 package com.jrai.flutter_keyboard_visibility;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import java.lang.reflect.Method;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -82,7 +86,7 @@ public class FlutterKeyboardVisibilityPlugin implements FlutterPlugin, ActivityA
   }
 
 
-  private void listenForKeyboard(Activity activity) {
+  private void listenForKeyboard(final Activity activity) {
     mainView = activity.<ViewGroup>findViewById(android.R.id.content);
 
     ViewCompat.setOnApplyWindowInsetsListener(mainView, new OnApplyWindowInsetsListener() {
